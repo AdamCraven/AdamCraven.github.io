@@ -30,8 +30,8 @@ owner:
   avatar: bio-photo.jpg
   bio: "London-based JS dev"
   email:
-  disqus-shortname:
-  twitter: #username
+  disqus-shortname: adamcraven
+  twitter: Adam_Craven
   facebook: #username
   google:
     plus: #username
@@ -42,7 +42,7 @@ owner:
   bing-verify:
   github: #username
   stackoverflow: #http://stackoverflow.com/users/123456/username
-  linkedin: #username
+  linkedin: adamcraven2
   instagram: #username
   lastfm: #username
   tumblr: #username

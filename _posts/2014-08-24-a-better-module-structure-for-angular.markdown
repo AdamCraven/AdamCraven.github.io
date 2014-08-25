@@ -2,6 +2,7 @@
 layout: post
 title: A better module structure for Angular
 excerpt: "How to create a better module structure for angular, to reduce code complexity and stop overloading services and controllers"
+modified: 2014-08-25
 tags: [angular, architecture]
 comments: true
 image:
@@ -161,6 +162,6 @@ Using this module structure, it provides a guide as to how to structure your pro
 
 For very small modules you might not need a module controller. Sometimes the endpoints aren't needed as data is being passed in via an external module through the API - the same goes for the models and config. For simple modules and applications, data validation may occur in the view and in a large module, it maybe beneficial to have multiple module controllers.
 
-If you want to get in touch, I'm @Adam_Craven on twitter.
+If you want to get in touch, you can find me at [@Adam_Craven](https://twitter.com/Adam_Craven) on twitter.
 
 
