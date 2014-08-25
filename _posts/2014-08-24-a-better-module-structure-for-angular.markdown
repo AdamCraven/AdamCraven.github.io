@@ -43,11 +43,11 @@ You may already be aware of the problems with this structure when building large
 
 ## Angular - The Superheroic JavaScript MVW Framework
 
-Angular is an MVW framework - a Model View Whatever - It specifically does not tell you how to structure your projects beyond the model view. It does mention where to put the business logic in a short sentence on the documentation: 'Service - reusable business logic independent of views' [1](https://docs.angularjs.org/guide/concepts). But that is as far as it goes. All the books I've read on angular tend to recommend the same structure as above.
+Angular is an MVW framework - a Model View Whatever - It specifically does not tell you how to structure your projects beyond the model view. It does mention where to put the business logic in a short sentence on the documentation: 'Service - reusable business logic independent of views' <sup>[1](https://docs.angularjs.org/guide/concepts)</sup>. But that is as far as it goes. All the books I've read on angular tend to recommend the same structure as above.
 
 Services confusingly have two meanings in angular. A place for business logic that consists of providers, factories and services. Also services are instantiated constructors that can be dependency injected (DI) in. They do not have a specific purpose, in fact that are very non-specific in what they can be used for.
 
-As the documentation recommends that services are for business logic, is it not a suprise why most projects tend to have the majority of the code inside the services folder.
+As the documentation recommends that services are for business logic, is it not a suprise why most projects tend to have the majority of the code inside the services folder. This is not what we want.
 
 ## Defining the Whatever
 
@@ -61,17 +61,13 @@ Starting with what angular doesn't define well or what's usually either overload
 
 With the parts of the W defined, we can break this down to a folder structure which can provide a more robust structure for our application, using a pattern most are familiar with: MVC.
 
-
-The 'Whatever':
+Which looks like this:
 
 ![Defined structure]({{ site.url }}/images/structure/better-structure.png)
 
-* [Module Controllers](#module-controllers)
-* [Models](#models)
-* [Endpoints](#endpoints)
-* [Config](#config)
-* [API](#api)
+The services have been removed and replaced with named parts doing a specific task from above, let's have a look at the structure in-depth. Starting with...
 
+---
 
 ## Module Controllers
 
@@ -152,13 +148,11 @@ Usually a higher level controller will link one or more module APIs together, or
 
 ![File structure]({{ site.url }}/images/structure/file-structure.png){: .image-pull-right}
 
-To the right is a module structure for a module called 'habit'.
+To the right is a module structure for a module called 'habit'. It implements the structure. The services folder has been replaced by 4 well defined folders: models, module controllers, endpoints and config.
 
-The services folder has been replaced by 4 well defined folders: models, module controllers, endpoints and config.
+There is one extra file, uncovered in the structure, it's the *habit-module.js*. It defines initial module bootstrapping, such as assigning controllers, directives and services to the angular module.
 
-The only uncovered file in the structure is *habit-module.js* defines initial module bootstrapping, such as assigning controllers, directives and services to the angular module.
-
-Using this module structure, it provides a guide as to how to structure your project. It is important to understand that it is **flexible** in how it can be used.
+Using this module structure, it provides a guide as to how to structure your project. But it is important to understand that it is **flexible** in how it can be used.
 
 For very small modules you might not need a module controller. Sometimes the endpoints aren't needed as data is being passed in via an external module through the API - the same goes for the models and config. For simple modules and applications, data validation may occur in the view and in a large module, it maybe beneficial to have multiple module controllers.
 
