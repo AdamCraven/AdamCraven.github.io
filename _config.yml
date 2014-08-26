@@ -27,7 +27,7 @@ kramdown:
 # Site owner
 owner:
   name: Adam Craven
-  avatar: bio-photo.jpg
+  avatar: adam_craven.png
   bio: "I'm a London-based JS/HTML5 Consultant. A keen interest in the UI and solving business problems."
   email:
   disqus-shortname: adamcraven
