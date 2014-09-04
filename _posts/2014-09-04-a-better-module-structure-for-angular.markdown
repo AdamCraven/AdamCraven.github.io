@@ -3,7 +3,6 @@ layout: post
 title: A better module structure for Angular
 excerpt: "How to create a better module structure for angular, to reduce code complexity and stop overloading services and controllers"
 modified: 2014-09-04
-created: 2014-09-04
 tags: [angular, architecture]
 comments: true
 image:
@@ -108,7 +107,7 @@ There are several ways to call the models:
 * Hide the model from the view template and use methods on the view controller to change properties in the model.
 * If using IE10+ the uniform access principle to update transparently via both use of properties or setters.
 
-*NOTE: In angular 1.2, ng-model doesn't have the ability to call setter functions. A simple custom directive can do the job to enable the use of setter functions on form elements. Or if using a version of angular greater than 1.2, documentation for this feature can be accessed here: [ngModelOptions](https://docs.angularjs.org/api/ng/directive/ngModelOptions)*
+*NOTE: In angular 1.2, ng-model doesn't have the ability to call setter functions. A simple custom directive can do the job to enable the use of setter functions on form elements. Or if using a version of angular greater than 1.2, documentation for this feature can be found here: [ngModelOptions](https://docs.angularjs.org/api/ng/directive/ngModelOptions)*
 
 
 A data driven approach is the gold standard for UI applications, but it is important to apply good design principles to models (avoid multiple levels of inheritence, however tempting), such as decorators, composition, mixins and more. Ben Teese has a good introduction to structuring rich data models in angular: [rich object models in angular](http://blog.shinetech.com/2014/02/04/rich-object-models-and-angular-js/)
