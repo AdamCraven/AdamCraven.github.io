@@ -46,7 +46,7 @@ The structure shown is one of the most basic angular apps structures and unfortu
 
 ## Defining a structure - ngWhatever
 
-ngWhatever is a structure, it doesn't tell the developer how to implement the code, but where it should go. It does not discriminate between methodologies, A functional reactive programming approach is just as valid as a traditional object orientated one.
+ngWhatever is a structure, it doesn't tell the developer how to implement the code, but where it should go. It does not discriminate between methodologies, a functional reactive programming approach is just as valid as a traditional object orientated one.
 
 It encourages a data-driven approach to the User Interface. The state of the application is stored in models, not held in the DOM or in many different functions.
 
