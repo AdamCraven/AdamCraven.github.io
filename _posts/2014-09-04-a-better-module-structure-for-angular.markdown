@@ -50,7 +50,7 @@ ngWhatever is a structure, it doesn't tell the developer how to implement the co
 
 It encourages a data-driven approach to the User Interface. The state of the application is stored in models, not held in the DOM or in many different functions.
 
-The core **core** of the ngWhatever consists of guidance on:
+The **core** of the ngWhatever consists of guidance on:
 
 * Communication and parsing of data from the server.
 * Storing, manipulation and validation of data.
@@ -58,11 +58,11 @@ The core **core** of the ngWhatever consists of guidance on:
 * Configuration shared throughout the module.
 * Communicating between others modules.
 
-With the parts of the MV[W]haetever defined, we can break this down to a folder structure which can provide a more robust structure for our application, using a pattern most are familiar with: MVC.
+With the parts of the MV[W]haetever defined, we can break this down to a folder structure which provides a more robust structure for our application, using a pattern most are familiar with: MVC.
 
 ![Defined structure]({{ site.url }}/images/structure/better-structure.png)
 
-The services have been removed and replaced with named parts doing a specific task from above, let's have a look at the structure in-depth. Starting with what already exists in angular:
+The services have been removed and replaced with named parts doing a specific task, let's have a look at the structure in-depth. Starting with what already exists in angular:
 
 
 
