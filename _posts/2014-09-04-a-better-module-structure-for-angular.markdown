@@ -58,7 +58,7 @@ The **core** of the ngWhatever consists of guidance on:
 * Configuration shared throughout the module.
 * Communicating between others modules.
 
-With the parts of the MV[W]haetever defined, we can break this down to a folder structure which provides a more robust structure for our application, using a pattern most are familiar with: MVC.
+With the parts of the MV[W]hatever defined, we can break this down to a folder structure which provides a more robust structure for our application, using a pattern most are familiar with: MVC.
 
 ![Defined structure]({{ site.url }}/images/structure/better-structure.png)
 
