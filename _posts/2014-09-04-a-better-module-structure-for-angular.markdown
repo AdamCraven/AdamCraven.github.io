@@ -173,8 +173,8 @@ For very small modules you might not need a module controller. Sometimes the end
 
 ## Further reading
 
-* Part 2 - A walk through of the implementation with code samples (coming soon)
-* Part 3 - Advanced implementations (coming soon)
+* Part 2 - A walk through of the implementation with code samples (coming early Jan 2015)
+* Part 3 - Advanced implementations (tbc)
 
 ---
 
