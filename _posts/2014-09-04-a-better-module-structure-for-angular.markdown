@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ngWhatever - A better structure for Angular modules (part 1 of 3)
+title: ngWhatever - A better structure for Angular modules
 excerpt: "How to create a better module structure for angular, to reduce code complexity and stop overloading services and controllers"
 modified: 2014-10-07
 tags: [angular, architecture]
@@ -170,11 +170,6 @@ There is one extra file, uncovered in the structure, it's the *habit-module.js*.
 Using this module structure, it provides a guide as to how to structure your project. But it is important to understand that it is **flexible** in how it can be used.
 
 For very small modules you might not need a module controller. Sometimes the endpoints aren't needed as data is being passed in via an external module (through the API). For simple modules and applications, data validation may occur in the view and in a large module, it maybe beneficial to have multiple module controllers.
-
-## Further reading
-
-* Part 2 - A walk through of the implementation with code samples (coming soon)
-* Part 3 - Advanced implementations (coming soon)
 
 ---
 
