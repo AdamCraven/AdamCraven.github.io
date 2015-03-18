@@ -22,7 +22,7 @@ image:
 </section><!-- /#table-of-contents -->
 
 
-ngWhatever - version 1.0.0
+ngWhatever - version 1.0.1
 
 This is a base module structure used on projects I have been working on recently. It has been very successful when implemented on large teams and is scalable from small applications all the way up to large financial trading platforms.
 
@@ -45,6 +45,9 @@ The structure shown is one of the most basic angular apps structures and unfortu
 
 
 ## Defining a structure - ngWhatever
+
+![Defined structure]({{ site.url }}/images/structure/overall-structure.png)
+
 
 ngWhatever is a structure, it doesn't tell the developer how to implement the code, but where it should go. It does not discriminate between methodologies, a functional reactive programming approach is just as valid as a traditional object orientated one.
 
@@ -159,6 +162,7 @@ If the module is completely declarative, the directives API can become the API.
 
 ---
 
+
 ## Using the structure
 
 ![File structure]({{ site.url }}/images/structure/file-structure.png){: .image-pull-right}
@@ -172,6 +176,11 @@ Using this module structure, it provides a guide as to how to structure your pro
 For very small modules you might not need a module controller. Sometimes the endpoints aren't needed as data is being passed in via an external module (through the API). For simple modules and applications, data validation may occur in the view and in a large module, it maybe beneficial to have multiple module controllers.
 
 ---
+
+## changelog
+
+* 1.0.1 - Add diagram, clarify points
+* 1.0.0 - Initial
 
 
 Want to get in touch? You can find me at [@Adam_Craven](https://twitter.com/Adam_Craven) on twitter.
