@@ -3,7 +3,7 @@ layout: home
 excerpt: "Thoughts on the UI, HTML and architecture"
 tags: [blog, JavaScript, HTML5]
 image:
-  feature: texture-feature-01.jpg
-  credit: Texture Lovers
-  creditlink: http://texturelovers.com
+  feature: sample-image-1.jpg
+  credit: WeGraphics
+  creditlink: http://wegraphics.net/downloads/free-ultimate-blurred-background-pack/
 ---
