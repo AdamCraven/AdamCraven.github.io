@@ -6,7 +6,7 @@ modified: 2014-10-07
 tags: [angular, architecture]
 comments: true
 image:
-  feature: texture-feature-05.jpg
+  feature: sample-image-5.jpg
   credit: Texture Lovers
   creditlink: http://texturelovers.com
 ---
