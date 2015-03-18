@@ -24,7 +24,7 @@ image:
 
 ngWhatever - version 1.0.0
 
-This is a module structure introduced to the projects I have been working on recently. It has been very successful when implemented on large teams and is scalable from small applications all the way up to large financial trading platforms.
+This is a base module structure used on projects I have been working on recently. It has been very successful when implemented on large teams and is scalable from small applications all the way up to large financial trading platforms.
 
 It clarifies where code should go, improves efficiency of the team by introducing strong conventions, makes unit testing easier and changes an application from an angular application, to an application that happens to use angular.
 
@@ -167,7 +167,7 @@ To the right is a module structure for a module called 'habit'. It implements th
 
 There is one extra file, uncovered in the structure, it's the *habit-module.js*. It defines initial module bootstrapping, such as assigning controllers, directives and services to the angular module.
 
-Using this module structure, it provides a guide as to how to structure your project. But it is important to understand that it is **flexible** in how it can be used.
+Using this module structure, it provides a guide as to how to structure your project. But it is important to understand that it is **flexible** in how it can be used and should serve as a base for more complex architectures.
 
 For very small modules you might not need a module controller. Sometimes the endpoints aren't needed as data is being passed in via an external module (through the API). For simple modules and applications, data validation may occur in the view and in a large module, it maybe beneficial to have multiple module controllers.
 
