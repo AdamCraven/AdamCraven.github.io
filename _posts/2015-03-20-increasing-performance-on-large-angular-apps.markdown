@@ -30,14 +30,14 @@ With a good JIT JS engine and decent hardware spec, you would expect a complete 
 
 In large apps, with over 1,000 watchers it can be around 12ms or more.
 
-Many things trigger a rootscope digest in angular: User events (ng-keypress, ng-keydown, ng-click, etc), $q service, $http service, $timeout, $apply, $evalAsync and a few more. They can compound together to really slow down an app.
+Many things trigger a rootscope digest in angular: User events (ng-keypress, ng-keydown, ng-click, etc), $q service, $http service, $timeout, $apply, $evalAsync and a few more.
 
 <figure>
     <img src="{{ site.url }}/images/fng-directives/scope-tree.gif" alt="Scope tree">
     <figcaption>Angular's scope tree. Every scope is visited on a digest to check watchers</figcaption>
 </figure>
 
-Let's take an example. Below is a live search component, it is an input field that performs a live search and displays the results in a list.
+All the $rootscope digests can compound together to bring an app to halt. An example below is a live search component, it is an input field that performs a live search and displays the results in a list.
 
 {% highlight html %}
 {% raw %}
