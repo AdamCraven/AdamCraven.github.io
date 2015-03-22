@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to improve performance of enterprise angular apps dramatically. Local digests and better directives.
+title: Improving performance of enterprise angular apps dramatically. With local digests and better directives.
 excerpt: ""
 modified: 2015-03-20
 tags: [angular, digest]
@@ -30,14 +30,14 @@ With a good JIT JS engine and decent hardware spec, you would expect a complete 
 
 In large apps, with over 1,000 watchers it can be around 12ms or more.
 
-Many things trigger a rootscope digest in angular: User events (ng-keypress, ng-keydown, ng-click, etc), $q service, $http service, $timeout, $apply, $evalAsync and a few more. And a few of those can compound together to really slow down an app.
+Many things trigger a rootscope digest in angular: User events (ng-keypress, ng-keydown, ng-click, etc), $q service, $http service, $timeout, $apply, $evalAsync and a few more. They can compound together to really slow down an app.
 
 <figure>
     <img src="{{ site.url }}/images/fng-directives/scope-tree.gif" alt="Scope tree">
     <figcaption>Angular's scope tree. Every scope is visited on a digest to check watchers</figcaption>
 </figure>
 
-Let's take an example. Below is a live search component, it is an input field that performs a live search and displays the results in a list below.
+Let's take an example. Below is a live search component, it is an input field that performs a live search and displays the results in a list.
 
 {% highlight html %}
 {% raw %}
@@ -56,9 +56,9 @@ Let's take an example. Below is a live search component, it is an input field th
 
 Entering that input field, typing one character and leaving the input field will require 5 full rootscope digests. 6, when the response from a live search service returns. In our large app, that could be 72ms of the time spent digesting - During that time the UI would freeze, a very perceptible lag would be felt to the user
 
-What if there was a way to prevent the whole app refreshing? This is especially important if you have components that don't make changes to the rest of the app or if they do interact via an [API](/a-better-module-structure-for-angular/#api) to control the updates to the rest of the app.
+What if there was a way to prevent the whole app refreshing? This is especially important if you have components that don't make changes to the rest of the app or if they do interact via an [API](/a-better-module-structure-for-angular/#api) to control the updates to other components.
 
-Fortunately angular is built in a way that means you don't have to rootscope digest.
+Fortunately angular is built in a way that means you don't have to rootscope digest all the time.
 
 ## The local digest
 
@@ -82,10 +82,7 @@ A childscope of a parent is likely to only have a few watches existing on it, fa
 
 There is still a problem, however. Taking our previous example of the live search component, it is still calling the ng-event directives which all trigger the rootscope digests, the most we can reduce the rootscope digests by in that example is from 6 to 5 - When the result received from the server could be executed as a local digest.
 
-Unfortunately there is no way to make the default angular directives execute a local digest without hacking the framework, but we can replace the directives with better ones that can.
-
-How can this be worked around?
-
+Unfortunately there is no way to make the default angular directives execute a local digest without hacking the framework, but we can easily replace the directives with ones that can.
 
 ## Faster angular directives - (fng)
 
@@ -118,7 +115,7 @@ The HTML for the fng-events are
 {% endraw %}
 {% endhighlight %}
 
-There is one changed required in the scope of the live search directive:
+There is one change required in the scope of the live search directive:
 
 {% highlight js %}
     $liveSearch.$stopDigestPropagation = true;
@@ -128,7 +125,7 @@ There is one changed required in the scope of the live search directive:
 
 The fng are opt-in directives, you have to set the $stopDigestPropagation on a scope.
 
-When a user interacts with a scope by triggering an event, it will check that scope for a truthy $stopDigestPropagation property. If that doesn't exist it will check its parent. When found will call a local $digest in that scope.
+When a user interacts with a scope by triggering an event, it will check that scope for a truthy $stopDigestPropagation property. If that doesn't exist it will check its parent. When found it will call a $digest in that scope.
 
 <figure class="half">
     <img src="{{ site.url }}/images/fng-directives/scope-tree-local.gif" alt="Scope tree local">
@@ -142,7 +139,8 @@ When the $stopDigestPropagation property doesn't exist on any parents, it will f
     <img src="{{ site.url }}/images/fng-directives/scope-full-digest.gif" alt="Scope tree">
 </figure>
 
-As they work that same way as the exisitng ng-event directives, they are a drop-in replacement.
+As they work that same way as the existing ng-event directives, they can be dropped in and used as a replacement.
+That means all ng-keydowns can be converted to fng-keydowns, and so forth.
 
 
 
