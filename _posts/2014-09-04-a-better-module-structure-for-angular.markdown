@@ -46,7 +46,7 @@ The structure shown is one of the most basic angular apps structures and unfortu
 
 ## Defining a structure - ngWhatever
 
-![Defined structure]({{ site.url }}/images/structure/overall-structure.png)
+![Overall structure]({{ site.url }}/images/structure/overall-structure.png)
 
 
 ngWhatever is a structure, it doesn't tell the developer how to implement the code, but where it should go. It does not discriminate between methodologies, a functional reactive programming approach is just as valid as a traditional object orientated one.
@@ -63,7 +63,7 @@ The **core** of the ngWhatever consists of guidance on:
 
 With the parts of the MV[W]hatever defined, we can break this down to a folder structure which provides a more robust structure for our application, using a pattern most are familiar with: MVC.
 
-![Defined structure]({{ site.url }}/images/structure/better-structure.png)
+![Better structure]({{ site.url }}/images/structure/better-structure.png)
 
 The services have been removed and replaced with named parts doing a specific task, let's have a look at the structure in-depth. Starting with what already exists in angular:
 
