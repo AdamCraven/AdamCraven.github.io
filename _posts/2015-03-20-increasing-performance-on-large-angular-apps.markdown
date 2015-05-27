@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Improving performance of enterprise angular apps dramatically. With local digests and better directives.
-excerpt: ""
+title: Improving performance of enterprise angular apps
+excerpt: "Why digests can be slow. How you can leverage local digests to make it faster combining with custom directives for a performance edge"
 modified: 2015-03-20
 tags: [angular, digest]
 comments: true
@@ -23,21 +23,30 @@ image:
 </section><!-- /#table-of-contents -->
 
 
-## Rootscope digests are slow.
-The rootscope digest will check all the scopes in the app, calling every watcher in to see if any data has been modified.
-
-With a good JIT JS engine and decent hardware spec, you would expect a complete digest to take less than a millisecond for small apps.
-
-In large apps, with over 1,000 watchers it can be around 12ms or more.
-
-Many things trigger a rootscope digest in angular: User events (ng-keypress, ng-keydown, ng-click, etc), $q service, $http service, $timeout, $apply, $evalAsync and a few more.
+Summary: Digests can be slow. They happen often. Local digests are better. But you need something else to get the real performance edge
 
 <figure>
     <img src="{{ site.url }}/images/fng-directives/scope-tree.gif" alt="Scope tree">
     <figcaption>Angular's scope tree. Every scope is visited on a digest to check watchers</figcaption>
 </figure>
+The core of angular's dirty checking mechanism, it checks all the scopes in the app, calling every watcher to see if any data has been modified.
 
-All the $rootscope digests can compound together to bring an app to halt. An example below is a live search component, it is an input field that performs a live search and displays the results in a list.
+With a good JIT JS engine and decent hardware spec, you would expect a complete digest to take less than a millisecond for small apps.
+
+In large enterprise apps with over 1,000 watchers. It can creep above 10ms or more. This is a long time to halt the browser and with other tasks occurring on the same thread, such as rendering, it will cause application performance to dip below 60fps.
+
+
+* User events (ng-keypress, ng-keydown, ng-click, etc)
+* $q service
+* $http service
+* $timeout
+* $evalAsync
+* during animations
+* and manually triggered ($apply, $digest)
+
+It is very easy for many $rootscope digests to compound together to bring the UI to a halt. An example is below, again based on a real production component. Here we have a live search component, it is an input field that performs a live search and displays the results in a list:
+
+Digests may seem infrequent, but they are triggered by many things:
 
 {% highlight html %}
 {% raw %}
@@ -54,7 +63,7 @@ All the $rootscope digests can compound together to bring an app to halt. An exa
 {% endraw %}
 {% endhighlight %}
 
-Entering that input field, typing one character and leaving the input field will require 5 full rootscope digests. 6, when the response from a live search service returns. In our large app, that could be 72ms of the time spent digesting - During that time the UI would freeze, a very perceptible lag would be felt to the user
+Entering that input field, typing one character and leaving the input field will require 5 full rootscope digests. 6, when the response from a live search service returns. In our large app, that could be 72ms of the time spent digesting and the UI would freeze, creating a poor user experience.
 
 What if there was a way to prevent the whole app refreshing? This is especially important if you have components that don't make changes to the rest of the app or if they do interact via an [API](/a-better-module-structure-for-angular/#api) to control the updates to other components.
 
@@ -78,7 +87,14 @@ All it requires is calling the $digest function on the desired scope.
 </figure>
 
 
-A childscope of a parent is likely to only have a few watches existing on it, far less than the app and digest times will drop.
+A childscope of a parent is likely to only have a few watches existing on it, far less than the app and digest times will drop to a fraction.
+
+Working inside a [module]({{ site.url }}/a-better-module-structure-for-angular/)
+
+// Talk about when to use it. A few paragraphs
+
+
+### Back to our example...
 
 There is still a problem, however. Taking our previous example of the live search component, it is still calling the ng-event directives which all trigger the rootscope digests, the most we can reduce the rootscope digests by in that example is from 6 to 5 - When the result received from the server could be executed as a local digest.
 
@@ -88,7 +104,7 @@ Unfortunately there is no way to make the default angular directives execute a l
 
 Faster angular events mimic the functionality of the exisiting ng-event directives, but have a feature that allows them to be called in the local scope.
 
-The demo below shows them in action on a simulated large app:
+The demo below shows both in action on a simulated large app:
 
 <figure class="half">
     <img src="{{ site.url }}/images/fng-directives/ng-event-anim.gif" alt="Scope tree">
