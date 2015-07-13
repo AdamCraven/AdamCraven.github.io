@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Improving performance of enterprise angular apps
+title: Improving performance of enterprise angular apps by using better directives
 excerpt: "Why digests can be slow. How you can leverage local digests to make it faster combining with custom directives for a performance edge"
 modified: 2015-03-20
 tags: [angular, digest]
@@ -22,16 +22,9 @@ image:
 </div>
 </section><!-- /#table-of-contents -->
 
-Summary: Digests can be slow, the standard directives trigger them often. Use more perf orientated directives
-
-
-Summary: Digests can be slow. They happen often. Local digests are better. But you need something else to get the real performance edge
-
-
-The larger your angular app, the slower it gets. Watchers in enterprise apps can easily creep over 1,000 and dirty checking (digests) can take 10ms or longer. If a few digests occur within close proximity of each other or are triggered one after another, this will cause the UI to freeze and the app to become unresponsive.
+The larger your angular app, the slower it gets. Watchers in enterprise apps can easily reach over 1,000 and dirty checking (digests) can take 10ms or longer. If a few digests occur within close proximity or are triggered one after another, this will cause the UI to freeze and the app to become unresponsive.
 
 One way to solve this is to reduce the amount of rootscope digests happening in the application.
-
 
 > Triggers of rootscope digest:
 >
@@ -45,13 +38,13 @@ One way to solve this is to reduce the amount of rootscope digests happening in 
 
 <figure>
     <img src="{{ site.url }}/images/fng-directives/scope-tree.gif" alt="Scope tree">
-    <figcaption>Angular's scope tree. On a rootscope digest Every scope is visited and every watcher checked. Angular's dirty checking mechanism, it checks all the scopes in the app, calling every watcher to see if any data has been modified.</figcaption>
+    <figcaption>Angular's scope tree. A rootscope digest visits every child scope and checks its watchers to see if any data has been modifed.</figcaption>
 </figure>
 
 
-### Not everything requires a rootscope digest
+## Not everything requires a rootscope digest
 
-When building larger apps, code is separated into [modules](/a-better-module-structure-for-angular/). Changes inside that module often have no side effects on other modules on the same page. In this case a full digest cycle isn't needed. It is better to trigger via explicit [APIs](/a-better-module-structure-for-angular/#api) between large modules in the app.
+When building larger apps, code should be separated into [modules](/a-better-module-structure-for-angular/). Changes inside that module often have no side effects on other modules on the same page. This is a case when a full digest isn't needed. It is better to trigger updates via explicit [APIs](/a-better-module-structure-for-angular/#api) between modules in large apps.
 
 ### When digests become a problem
 
@@ -72,34 +65,49 @@ Take an example of a live search component. It is an input field that performs a
 {% endraw %}
 {% endhighlight %}
 
-Entering that input field, typing one character and leaving the field will require 5 full rootscope digests. In our large app, the UI would be frozen for 50ms as the 5 digest cycles trigger.
+Because of the ng-event directives (ng-keypress, ng-focus, etc..) attached, just entering that input field, typing one character and leaving the field will require 5 full rootscope digests. In a large app, the UI would be frozen for 50ms as the 5 digest cycles trigger one after another.
 
-Unfortunately, it's hard to avoid triggering rootscope digests, because all the default event directives (ng-click, ng-focus) cause them to occur, which cannot be prevented.
+Unfortunately, it's hard to avoid triggering rootscope digests, because all the default event directives cause them to occur, which cannot be prevented.
 
-What if there was a way to prevent the whole app refreshing? This would mean the live search component could avoid triggering rootscope digest and instead trigger a more localised digest within the module it's within. And because there will be considerably less watchers at the module level, the digest times will drop to a fraction of
-
-Fortunately angular is built in a way that means you don't have to rootscope digest all the time.
+To get around this, you could create a lot of different rootscopes in angular and isolate the modules from each other, but this causes a lot of problems with DI and other behaviour. There is a simpler solution:
 
 
-## Faster angular directives - (fng)
+## Faster angular events directives - (fng)
 
-Faster angular events mimic the functionality of the existing ng-event directives, but have a feature that allows them to be called in the local scope.
-
-The demo below shows both in action on a simulated large app:
+Faster angular event directives mimic the functionality of the existing ng-event directives, but can be called in a desired scope.
 
 <figure class="half">
     <img src="{{ site.url }}/images/fng-directives/ng-event-anim.gif" alt="Scope tree">
     <img src="{{ site.url }}/images/fng-directives/fng-event-anim.gif" alt="Scope tree">
-    <figcaption>Left: Using ng-events rootscope digest. Right: Using fng events, localscope digest</figcaption>
+    <figcaption>Left: Using ng-events rootscope digest. Right: Using fng events in a large app</figcaption>
 </figure>
 
 <br />
 
-The ng-events receives the keyboard inputs, but it takes a long time for the UI to unblock and letters to appear.
+In the ng-events example to the left it receives the keyboard inputs, but it takes a long time for the UI to unblock and letters to appear.
 
-With the fng-events, there is no perceptible input lag and the text is entered as typed.
+With the fng-events, there is no perceptible input lag and the text is entered as typed. Even though there are the same amount of watchers in the app, there are considerably less watchers in the scope it is digesting in, so the digest times will drop to a fraction of the time that the global one will.
 
-The HTML for the fng-events are
+### How it works
+
+The fng are opt-in directives, they behave the same as a normal ng event directive. When triggered (e.g. fng-click), it will check that scope and then its parents for a true $stopDigestPropagation property. When found it will call a $digest in that scope.
+
+<figure class="half">
+    <img src="{{ site.url }}/images/fng-directives/scope-tree-local.gif" alt="Scope tree local">
+    <img src="{{ site.url }}/images/fng-directives/scope-local-digest.gif" alt="Scope tree">
+</figure>
+
+If $stopDigestPropagation property doesn't exist on any parents, it will fall-back to the default behaviour and act the same as the default ng-events directives and call $rootScope.digest.
+
+<figure class="half">
+    <img src="{{ site.url }}/images/fng-directives/scope-tree.gif" alt="Scope tree local">
+    <img src="{{ site.url }}/images/fng-directives/scope-full-digest.gif" alt="Scope tree">
+</figure>
+
+As they work the same way as the existing ng-event directives, they can be dropped in and used as a replacement.
+That means all ng-keydowns can be converted to fng-keydowns, and so forth.
+
+So the HTML for the fng-events look almoost same as the ng-events:
 
 {% highlight html %}
 {% raw %}
@@ -113,33 +121,27 @@ The HTML for the fng-events are
 {% endraw %}
 {% endhighlight %}
 
-There is one change required in the scope of the live search directive:
+To bring the fng directives to life, and allow $digest to occur in the chosen scope, there is one change required in one of the parents scopes:
+
+{% highlight js %}
+    $parentScope.$stopDigestPropagation = true;
+{% endhighlight %}
+
+
+###How to chose the where to digest
+
+It is not recommended that these are used at low levels, such as in individual components. The live search component mentioned earlier would not implement $stopDigestPropagation property. It should be implemented at the module level, or higher. Such as a
+
+But to allow the $digest to occur in the desired scope, there is one change required in the scope of the live search directive:
 
 {% highlight js %}
     $liveSearch.$stopDigestPropagation = true;
 {% endhighlight %}
 
-### How it works
 
-The fng are opt-in directives, they behave the same as normal event directives.  Once $stopDigestPropagation on a scope.
 
-When a user interacts with a scope by triggering an event, it will check that scope for a truthy $stopDigestPropagation property. If that doesn't exist it will check its parent. When found it will call a $digest in that scope.
 
-<figure class="half">
-    <img src="{{ site.url }}/images/fng-directives/scope-tree-local.gif" alt="Scope tree local">
-    <img src="{{ site.url }}/images/fng-directives/scope-local-digest.gif" alt="Scope tree">
-</figure>
-
-When the $stopDigestPropagation property doesn't exist on any parents, it will fallback to the default behaviour of the ng-events and call a $rootScope.digest.
-
-<figure class="half">
-    <img src="{{ site.url }}/images/fng-directives/scope-tree.gif" alt="Scope tree local">
-    <img src="{{ site.url }}/images/fng-directives/scope-full-digest.gif" alt="Scope tree">
-</figure>
-
-As they work that same way as the existing ng-event directives, they can be dropped in and used as a replacement.
-That means all ng-keydowns can be converted to fng-keydowns, and so forth.
-
+The directives can be installed from here: https://github.com/AdamCraven/fng-event-directives
 
 
 
