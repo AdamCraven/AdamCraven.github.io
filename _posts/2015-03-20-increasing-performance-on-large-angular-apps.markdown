@@ -70,7 +70,7 @@ Because of the ng-event directives (ng-keypress, ng-focus, etc..), just entering
 
 Unfortunately, you cannot avoid triggering root scope digests, because all the default event directives cause them to occur.
 
-To get around this, you could create several angular apps on a page, with individual root scopes so the modules are isolated from each other, but this causes a lot of problems with DI and other behaviour. There is a simpler solution...
+A work around involves creating several angular apps on a page, with individual root scopes. Which ensures the modules are isolated from each other, but this causes a lot of problems with DI and other behaviour. There is a simpler solution...
 
 ## Faster angular events directives - (fng)
 
