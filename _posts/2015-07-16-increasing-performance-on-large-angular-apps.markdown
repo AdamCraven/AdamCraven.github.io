@@ -2,7 +2,7 @@
 layout: post
 title: Improve the performance of large angular 1.x apps, by using faster event directives
 excerpt: "How to avoid root scope digests using faster angular events, which mimic the functionality of the existing ng-event directives, but have a feature that allows them to be called in a desired scope, rather than trigger a root scope digest."
-modified: 2015-07-15
+modified: 2015-07-16
 tags: [angular, digest]
 comments: true
 image:
