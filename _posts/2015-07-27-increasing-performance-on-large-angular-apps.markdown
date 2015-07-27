@@ -108,8 +108,6 @@ To bring the partial digest functionality to life, there is one change required 
     $parentScope.$stopDigestPropagation = true;
 {% endhighlight %}
 
-
-
 ### How it works
 
 The fng events are opt-in directives, which behave *the same* as an ng event directive. However, it differs in one important way. When triggered (e.g. fng-click) it bubbles up the scope tree and searches for a defined $stopDigestPropagation property.
