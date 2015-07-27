@@ -28,7 +28,7 @@ One way to solve this is to reduce unnecessary calls to the dirty checking mecha
 
 <figure>
     <img src="{{ site.url }}/images/fng-directives/scope-tree.gif" alt="Scope tree">
-    <figcaption>Angular's scope tree. A root scope digest visits every child scope, checks its watchers and see if any data has been modified.</figcaption>
+    <figcaption>Angular's scope tree. A root scope digest visits every child scope, checks its watchers and sees if any data has been modified.</figcaption>
 </figure>
 
 > Triggers of a root scope digest:
@@ -43,9 +43,9 @@ One way to solve this is to reduce unnecessary calls to the dirty checking mecha
 
 ## Root scope digests aren't always desirable
 
-When building larger apps, code is separated into [modules](/a-better-module-structure-for-angular/). When changes occur inside a module that have no side effects on other modules on the same page, a full digest isn't needed. For example when an item on the page is updating 5 times a second, but the rest of the app is staying the same, there is no need to refresh everything. Doing so would slow the UI down.
+When building larger apps, code is separated into [modules](/a-better-module-structure-for-angular/). When changes occur inside a module that has no side effects on other modules on the same page, a full digest isn't needed. For example, when an item on a page is updating 5 times a second, but the rest of the app remains the same, there is no need to refresh everything. Doing so would slow the UI down.
 
-When a module does effect another, it is better to trigger updates via explicit [APIs](/a-better-module-structure-for-angular/#api) between modules. The default root scope digest mechanism can also be used, but it can become problematic in large apps.
+When a module does affect another, it is better to trigger updates via explicit [APIs](/a-better-module-structure-for-angular/#api) between modules. The default root scope digest mechanism can also be used, but it can become problematic in large apps.
 
 ## Problematic digests
 
@@ -70,7 +70,7 @@ Because of the ng-event directives (ng-keypress, ng-focus, etc..), just entering
 
 Unfortunately, you cannot avoid triggering root scope digests, because all the default event directives cause them to occur.
 
-A work around involves creating several angular apps on a page, with individual root scopes. Which ensures the modules are isolated from each other, but this causes a lot of problems with DI and other behaviour. There is a simpler solution...
+A work around involves creating several angular apps on a page, with individual root scopes. This ensures the modules are isolated from each other, but it causes a lot of problems with DI and other behaviour. There is a simpler solution...
 
 ## Angular-Fng - Faster angular (fng)
 
@@ -84,9 +84,9 @@ Faster angular event directives mimic the functionality of the existing ng-event
 
 <br />
 
-In the ng-events example to the left it receives the keyboard inputs, but it takes a long time for the UI to unblock and letters to appear, this is because it is calling many root scope digests consecutively in a simulated large app.
+The ng-events example to the left receives the key presses, but it takes a long time for the UI to unblock and letters to appear. This is due to root scope digests consecutively being called.
 
-With the fng-events, there is no perceptible input lag and the text is entered as typed. This is because it is not calling a root scope digest, but one of the child scopes (otherwise known as a partial or local digest) where there are considerably less watchers. Because of this the digest times drop to a fraction of the time that the global (root scope) one does.
+With the fng-events, there is no perceptible input lag and the text is entered as typed. It is not calling a root scope digest, but a partial (or local) digest where there are considerably less watchers. As a result of this, the digest times drop to a fraction of the time of the global root scope digest.
 
 Both examples are very similar in terms of code, but the HTML for the right hand demo replaces 'ng' with 'fng':
 
@@ -102,7 +102,7 @@ Both examples are very similar in terms of code, but the HTML for the right hand
 {% endraw %}
 {% endhighlight %}
 
-And to bring the fng directives partial digest functionality to life, there is one change required in the JS. A property is set on one of its parent scopes:
+To bring the partial digest functionality to life, there is one change required in the JS. A property is set on one of its parent scopes:
 
 {% highlight js %}
     $parentScope.$stopDigestPropagation = true;
@@ -112,7 +112,7 @@ And to bring the fng directives partial digest functionality to life, there is o
 
 ### How it works
 
-The fng are opt-in directives, they behave *the same* as an ng event directive. But it differs in one important way. When triggered (e.g. fng-click) it bubbles up the scope tree and searches for a defined $stopDigestPropagation property.
+The fng events are opt-in directives, which behave *the same* as an ng event directive. However, it differs in one important way. When triggered (e.g. fng-click) it bubbles up the scope tree and searches for a defined $stopDigestPropagation property.
 
 When found it will call a $digest in the scope where $stopDigestPropagation is set and checks all the child scopes as shown below:
 
